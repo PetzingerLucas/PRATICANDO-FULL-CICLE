@@ -1,6 +1,7 @@
 const express = require('express')
-const artistRouter = express.Router()
 const connection = require('../server')
+
+const artistsRouter = express.Router()
 
 const getArtists = async () => {
   const query = 'SELECT * FROM artists'
@@ -14,15 +15,15 @@ const getArtistsById = async (id) => {
   return artist
 }
 
-artistRouter.get('/', async (_req, res) => {
+artistsRouter.get('/', async (_req, res) => {
   const artists = await getArtists()
   res.status(200).json(artists)
 })
 
-artistRouter.get('/:id', async (req, res) => {
+artistsRouter.get('/:id', async (req, res) => {
   const { id } = req.params
   const artists = await getArtistsById(+id)
   res.status(200).json(artists)
 })
 
-module.exports = artistRouter
+module.exports = artistsRouter
