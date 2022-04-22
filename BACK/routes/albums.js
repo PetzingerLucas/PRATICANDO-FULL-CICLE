@@ -10,14 +10,12 @@ const pharseAlbuns = (albums) => {
   const albumStructure = {}
   helper.createListMusicByAlbumId(albums, albumStructure)
   helper.setAlbumsToString(albums, albumsList)
-
   return helper.removePharsedDuplicateAlbums(albumsList, albumStructure)
 }
 
 const getAlbums = async () => {
   const [albums] = await connection.execute(query.getAlbums)
-  pharseAlbuns(albums)
-  return albums
+  return pharseAlbuns(albums)
 }
 
 const getAlbumsById = async (id) => {
