@@ -1,5 +1,6 @@
 const express = require('express')
 const connection = require('../server')
+const { SUCCESS } = require('../utils/statusCode')
 
 const artistsRouter = express.Router()
 
@@ -17,13 +18,13 @@ const getArtistsById = async (id) => {
 
 artistsRouter.get('/', async (_req, res) => {
   const artists = await getArtists()
-  res.status(200).json(artists)
+  res.status(SUCCESS).json(artists)
 })
 
 artistsRouter.get('/:id', async (req, res) => {
   const { id } = req.params
   const artists = await getArtistsById(+id)
-  res.status(200).json(artists)
+  res.status(SUCCESS).json(artists)
 })
 
 module.exports = artistsRouter

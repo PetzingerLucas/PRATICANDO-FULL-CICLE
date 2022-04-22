@@ -2,6 +2,7 @@ const connection = require('../server')
 const express = require('express')
 const query = require('../utils/querys')
 const helper = require('../helpers')
+const { SUCCESS } = require('../utils/statusCode')
 
 const albumsRouter = express.Router()
 
@@ -25,13 +26,13 @@ const getAlbumsById = async (id) => {
 
 albumsRouter.get('/', async (_req, res) => {
   const albums = await getAlbums()
-  res.status(200).json(albums)
+  res.status(SUCCESS).json(albums)
 })
 
 albumsRouter.get('/:id', async (req, res) => {
   const { id } = req.params
   const album = await getAlbumsById(+id)
-  res.status(200).json(album)
+  res.status(SUCCESS).json(album)
 })
 
 module.exports = albumsRouter

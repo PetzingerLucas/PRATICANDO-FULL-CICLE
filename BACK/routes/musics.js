@@ -1,6 +1,7 @@
 const connection = require('../server')
 const express = require('express')
 const query = require('../utils/querys')
+const { SUCCESS } = require('../utils/statusCode')
 const musicsRouter = express.Router()
 
 const getMusics = async () => {
@@ -14,12 +15,12 @@ const getMusicsById = async (id) => {
 }
 
 musicsRouter.get('/', async (req, res) => {
-  res.status(200).json(await getMusics())
+  res.status(SUCCESS).json(await getMusics())
 })
 
 musicsRouter.get('/:id', async (req, res) => {
   const { id } = req.params
-  res.status(200).json(await getMusicsById(+id))
+  res.status(SUCCESS).json(await getMusicsById(+id))
 })
 
 module.exports = musicsRouter
