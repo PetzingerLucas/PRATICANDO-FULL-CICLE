@@ -1,38 +1,30 @@
-const getMusicsByAlbumId = (albums) => {
-  return albums.map((alb) => ({ id: alb.album_id, music: alb.music_name }))
-}
 
-const setAlbumsToString = (albums) => {
-  const array = []
+const setAlbumsToString = (albums, array) => {
   albums.forEach((a) => {
     delete a.music_name
     array.push(JSON.stringify(a))
   })
-
-  return array
 }
-const createListMusicByAlbumId = (albums) => {
-  const albumsObj = {}
-  getMusicsByAlbumId(albums).forEach(e => {
-    albumsObj[e.id] ? albumsObj[e.id] = [...albumsObj[e.id], e.music] : albumsObj[e.id] = [e.music]
-  })
-  return albumsObj
+const createListMusicByAlbumId = (albums, obj) => {
+  albums
+    .map((album) => ({ id: album.album_id, music: album.music_name }))
+    .forEach(e => {
+      obj[e.id] ? obj[e.id] = [...obj[e.id], e.music] : obj[e.id] = [e.music]
+    })
 }
 
-const parseStringAlbuns = (result, albums) => {
-  return result.map((ab) => {
-    const parse = JSON.parse(ab)
-    parse.musics = createListMusicByAlbumId(albums)[parse.album_id]
-    return parse
-  })
-}
+const removePharsedDuplicateAlbums = (albumsList, albumStructure) => {
+  return [...new Set(albumsList)]
+    .map((ab) => {
+      const parse = JSON.parse(ab)
+      parse.musics = albumStructure[parse.album_id]
 
-const removeDuplicateAlbums = (albums) => {
-  const result = [...new Set(setAlbumsToString(albums))]
-  return parseStringAlbuns(result, albums)
+      return parse
+    })
 }
 
 module.exports = {
-  removeDuplicateAlbums,
-  setAlbumsToString
+  removePharsedDuplicateAlbums,
+  setAlbumsToString,
+  createListMusicByAlbumId
 }

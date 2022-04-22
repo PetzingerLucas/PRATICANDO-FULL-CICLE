@@ -1,35 +1,22 @@
 const connection = require('../server')
 const express = require('express')
 const query = require('../utils/querys')
+const helper = require('../helpers')
 
 const albumsRouter = express.Router()
 
-const parseAlbuns = (albums) => {
-  const array = []
-  const filteredAlbuns = albums.map((alb) => ({ id: alb.album_id, music: alb.music_name }))
-  albums.forEach((a) => {
-    delete a.music_name
-    array.push(JSON.stringify(a))
-  })
-  const albumsObj = {}
-  filteredAlbuns.forEach(e => {
-    albumsObj[e.id] ? albumsObj[e.id] = [...albumsObj[e.id], e.music] : albumsObj[e.id] = [e.music]
-  })
+const pharseAlbuns = (albums) => {
+  const albumsList = []
+  const albumStructure = {}
+  helper.createListMusicByAlbumId(albums, albumStructure)
+  helper.setAlbumsToString(albums, albumsList)
 
-  const teste = [...new Set(array)].map((ab) => {
-    const parse = JSON.parse(ab)
-    parse.musics = albumsObj[parse.album_id]
-
-    return parse
-  })
-
-  console.log(teste)
-  return teste
+  return helper.removePharsedDuplicateAlbums(albumsList, albumStructure)
 }
 
 const getAlbums = async () => {
   const [albums] = await connection.execute(query.getAlbums)
-  parseAlbuns(albums)
+  pharseAlbuns(albums)
   return albums
 }
 
