@@ -6,7 +6,7 @@ const { SUCCESS } = require('../utils/statusCode')
 
 const albumsRouter = express.Router()
 
-const pharseAlbuns = (albums) => {
+const parseAlbuns = (albums) => {
   const albumsList = []
   const albumStructure = {}
   helper.createListMusicByAlbumId(albums, albumStructure)
@@ -16,7 +16,7 @@ const pharseAlbuns = (albums) => {
 
 const getAlbums = async () => {
   const [albums] = await connection.execute(query.getAlbums)
-  return pharseAlbuns(albums)
+  return parseAlbuns(albums)
 }
 
 const getAlbumsById = async (id) => {
@@ -24,15 +24,23 @@ const getAlbumsById = async (id) => {
   return album
 }
 
-albumsRouter.get('/', async (_req, res) => {
-  const albums = await getAlbums()
-  res.status(SUCCESS).json(albums)
+albumsRouter.get('/', async (_req, res, next) => {
+  try {
+    const albums = await getAlbums()
+    return res.status(SUCCESS).json(albums)
+  } catch (error) {
+    next(error)
+  }
 })
 
-albumsRouter.get('/:id', async (req, res) => {
-  const { id } = req.params
-  const album = await getAlbumsById(+id)
-  res.status(SUCCESS).json(album)
+albumsRouter.get('/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params
+    const album = await getAlbumsById(+id)
+    return res.status(SUCCESS).json(album)
+  } catch (error) {
+    next(error)
+  }
 })
 
 module.exports = albumsRouter

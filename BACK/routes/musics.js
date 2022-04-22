@@ -14,13 +14,21 @@ const getMusicsById = async (id) => {
   return music
 }
 
-musicsRouter.get('/', async (req, res) => {
-  res.status(SUCCESS).json(await getMusics())
+musicsRouter.get('/', async (req, res, next) => {
+  try {
+    return res.status(SUCCESS).json(await getMusics())
+  } catch (error) {
+    next(error)
+  }
 })
 
-musicsRouter.get('/:id', async (req, res) => {
-  const { id } = req.params
-  res.status(SUCCESS).json(await getMusicsById(+id))
+musicsRouter.get('/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params
+    return res.status(SUCCESS).json(await getMusicsById(+id))
+  } catch (error) {
+    next(error)
+  }
 })
 
 module.exports = musicsRouter

@@ -28,10 +28,16 @@ JOIN albums AS ab
 ON mu.album_id = ab.album_id 
 WHERE music_id = ?;`
 
+const getArtists = 'SELECT * FROM artists'
+
+const getArtistsById = 'SELECT * FROM artists WHERE artist_id = ?'
+
 module.exports = {
   getAlbums,
   getAlbumsById,
   getMusics,
-  getMusicsById
+  getMusicsById,
+  getArtistsById,
+  getArtists
 
 }
